@@ -7,19 +7,29 @@ dataBase = mysql.connector.connect(
   passwd ="Super7898$$#",
   database = "serviceDB"
 )
-
+def showtables():
+  
+  cursorObject = dataBase.cursor()
+  cursorObject.execute("SHOW TABLES")
+  for i in cursorObject:
+    if len(i)>0:
+      
+      print(i)
+    else:
+      print("no tables to display")  
 # preparing a cursor object
 cursorObject = dataBase.cursor()
  
 # creating table 
-Records = """CREATE TABLE tbl_service (
+Records = """CREATE TABLE shift (
              Id INT NOT NULL AUTO_INCREMENT,
-             Services VARCHAR(255) NOT NULL,
+             Shiftname VARCHAR(255) NOT NULL,
              PRIMARY KEY (Id)
                    )"""
  
 # table created
 cursorObject.execute(Records) 
-print("Service table created successfully")
+print("shift table created successfully")
+showtables()
 # disconnecting from server
 dataBase.close()

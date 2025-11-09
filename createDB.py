@@ -11,6 +11,16 @@ DataBase = SQLC.connect(
 Cursor = DataBase.cursor()
 
 # Execute command to create the database
-Cursor.execute("CREATE DATABASE serviceDB")
+Cursor.execute("CREATE DATABASE CustomerDB")
 
 print("Service database is created")
+Cursor.execute("SHOW DATABASES")
+
+# printing all the databases
+for i in Cursor:
+    print(i)
+
+Cursor = DataBase.cursor()
+
+# finally closing the database connection
+DataBase.close()

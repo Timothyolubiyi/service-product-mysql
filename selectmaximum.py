@@ -12,7 +12,7 @@ dataBase = mysql.connector.connect(
 cursorObject = dataBase.cursor()
 
 # correct SQL syntax and parameter style
-sql = "SELECT * FROM tbl_service"
+sql = "SELECT * FROM tbl_service WHERE Id = (SELECT MAX(Id) FROM tbl_service);"
   # must be a tuple
 
 cursorObject.execute(sql)
@@ -23,7 +23,7 @@ for i in cursorObject:
 #  commit the change to actually save it
 dataBase.commit()
 #print(sql)
-print("Records retrieved from tbl_service successfully")
+print("maximum Id retrieved from tbl_service successfully")
 
 # close the connection
 dataBase.close()

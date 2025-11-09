@@ -14,3 +14,11 @@ Cursor = DataBase.cursor()
 Cursor.execute("DROP DATABASE serviceDB")
 
 print("ServiceDB database deleted successfully")
+# printing all the databases
+for i in Cursor:
+    print(i)
+
+Cursor = DataBase.cursor()
+
+# finally closing the database connection
+DataBase.close()

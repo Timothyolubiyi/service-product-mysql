@@ -8,19 +8,12 @@ dataBase = mysql.connector.connect(
     database="serviceDB"
 )
 
-# prepare a cursor object
 cursorObject = dataBase.cursor()
 
 #  correct SQL syntax and parameter style
-sql = "INSERT INTO tbl_service (Services) VALUES (%s)"
-val = ("cleaning",)  # must be a tuple
+records = "INSERT INTO tbl_service (Services) VALUES (%s)"
+val = ("Recruitment",)  # must be a tuple
 
-cursorObject.execute(sql, val)
-
-#  commit the change to actually save it
+cursorObject.execute(records, val)
 dataBase.commit()
-
 print("Data inserted into tbl_service successfully")
-
-# close the connection
-dataBase.close()
