@@ -62,14 +62,14 @@ def edit_service(id):
             flash("Service cannot be empty.", "error")
             return redirect(url_for('edit_service', id=id))
 
-        cur.execute("UPDATE tbl_service SET Services=%s WHERE Id=%s", (new_value, id))
+        cur.execute("UPDATE tbl_service SET Services=%s WHERE ServiceId=%s", (new_value, id))
         mysql.connection.commit()
         cur.close()
         flash("Service updated successfully!", "success")
         return redirect(url_for('list_services'))
 
     # GET request: fetch service
-    cur.execute("SELECT * FROM tbl_service WHERE Id=%s", (id,))
+    cur.execute("SELECT * FROM tbl_service WHERE ServiceId=%s", (id,))
     service = cur.fetchone()
     cur.close()
     if not service:
@@ -82,7 +82,7 @@ def edit_service(id):
 def delete_service(id):
     try:
         cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM tbl_service WHERE Id=%s", (id,))
+        cur.execute("DELETE FROM tbl_service WHERE ServiceId=%s", (id,))
         mysql.connection.commit()
         flash("Service deleted successfully!", "success")
     except Exception as e:
@@ -97,6 +97,100 @@ def delete_service(id):
 @app.route('/')
 def index():
     return redirect(url_for('list_services'))
+##==================================
+## adding customers logic
+##====================================
+# List all services
+@app.route('/customers')
+def list_customers():
+    cur = mysql.connection.cursor(DictCursor)
+    cur.execute("SELECT * FROM Customers")
+    rows = cur.fetchall()
+    cur.close()
+    return render_template("customers.html", rows=rows)
+
+# Page / Add customer
+@app.route('/customer/', methods=['GET', 'POST'])
+def add_customer():
+    if request.method == 'POST':
+        customername = request.form.get('Customername')
+        Email = request.form.get('Email')
+        ServiceId = request.form.get('ServiceId')
+       
+        if not customername or customername.strip() == "":
+            flash("Customer name field cannot be empty.", "error")
+            return redirect(url_for('add_customer'))
+
+        elif not Email  or Email.strip() == "":
+            flash("Email field cannot be empty.", "error")
+            return redirect(url_for('add_customer'))
+        elif not ServiceId or ServiceId.strip() == "":
+            flash("Service ID field cannot be empty.", "error")
+            return redirect(url_for('add_customer'))
+        
+        else:
+            
+           cur = mysql.connection.cursor()
+ 
+           cur.execute("NSERT INTO Customers (Customername, Email,ServiceId) VALUES (%s, %s, %s)",[customername,Email,ServiceId])
+        
+           mysql.connection.commit()
+        cur.close()
+        flash("Customer added successfully!", "success")
+        return redirect(url_for('list_customers'))
+
+    return render_template('addcustomer.html')
+
+#====customers logic continues==========##
+# Edit Customers page
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_customer(id):
+    cur = mysql.connection.cursor(DictCursor)
+    if request.method == 'POST':
+        Customername = request.form.get('Customername')
+        Email = request.form.get('Email')
+        ServiceId = request.form.get('ServiceId')
+       
+        if not Customername or Customername.strip() == "":
+            flash("Customer name field cannot be empty.", "error")
+            return redirect(url_for('edit_customer', id=id))
+        elif not Email  or Email.strip() == "":
+            flash("Email field cannot be empty.", "error")
+            return redirect(url_for('edit_customer', id=id))
+        elif not ServiceId or ServiceId.strip() == "":
+            flash("Service ID field cannot be empty.", "error")
+            return redirect(url_for('edit_customer', id=id))
+        else:
+            
+            cur.execute("UPDATE Customers SET Customername=%s WHERE CustomerId=%s", (Customername, id))
+            mysql.connection.commit()
+            cur.close()
+            flash("Customer updated successfully!", "success")
+        return redirect(url_for('list_customers'))
+
+    # GET request: fetch customers
+    cur.execute("SELECT * FROM Customers WHERE CustomerId=%s", (id,))
+    customer= cur.fetchone()
+    cur.close()
+    if not customer:
+        abort(404)
+    return render_template("editcustomer.html", Customername=customer)
+
+
+# Delete service
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete_customer(id):
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM Customers WHERE CustomerId=%s", (id,))
+        mysql.connection.commit()
+        flash("Customer deleted successfully!", "success")
+    except Exception as e:
+        mysql.connection.rollback()
+        flash(f"Error deleting customer: {str(e)}", "error")
+    finally:
+        cur.close()
+    return redirect(url_for('list_customer'))
 
 
 if __name__ == '__main__':
