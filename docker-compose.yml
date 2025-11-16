@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - 2000:5000
+    environment:
+      MYSQL_HOST: MYSQL_HOST
+      MYSQL_USER: MYSQL_USER
+      MYSQL_PASSWORD: MYSQL_PASSWORD
+      MYSQL_DB: serviceDB
+    depends_on:
+      - mysql
+ 
+  mysql:
+    image: mysql:5.7
+    environment:
+      
+      MYSQL_USER: MYSQL_USER
+      MYSQL_PASSWORD: MYSQL_PASSWORD
+      MYSQL_DATABASE: serviceDB
+    volumes:
+      - my-datavolume:/var/lib/mysql
+volumes:
+  my-datavolume:

@@ -11,10 +11,10 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")  # needed for flash messages
 
 # Configure MySQL
-app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')
-app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
-app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', 'TITAnic@2')
-app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'serviceDB')
+app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'MYSQL_HOST')
+app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'MYSQL_USER')
+app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', 'MYSQL_PASSWORD')
+app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'MYSQL_DB')
 
 mysql = MySQL(app)
 
